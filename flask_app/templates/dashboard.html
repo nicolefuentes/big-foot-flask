@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel=stylesheet type=text/css href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel=stylesheet type=text/css href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
+    <link rel=stylesheet type=text/css href="{{ url_for('static', filename='css/bootstrap.css') }}">
+    <script src="https://kit.fontawesome.com/e8b6f3f0bb.js" crossorigin="anonymous"></script>
+    <title>{{user.first_name}}'s Dashboard | Sasquatch Watch</title>
+</head>
+<body class="d-flex flex-column h-100" cz-shortcut-listen="true">
+    <header>
+        <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark ">
+            <a class="navbar-brand logo-font" href="/dashboard">Sasquatch Watch <i class="fa-solid fa-binoculars"></i></a>
+            <button class="navbar-toggler collapsed" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="navbar-collapse collapse" id="navbarCollapse">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item active">
+                        <a class="nav-link" href="/dashboard">Home <span class="sr-only">(current)</span></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/edit-profile">Edit Profile</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/sighting/report">Report a Sighting</a>
+                    </li>
+                    <li class="nav-item nav-link px-2">Welcome, {{user.first_name}} &nbsp;</li>
+                    <li class="nav-item"><a href="/logout" class="nav-link px-2">Logout <i class="fa-solid fa-arrow-right-from-bracket"></i></a></li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+    <main role="main">
+        <div class="px-4 py-5 my-5 hero-bg-static text-center">
+            <i class="fa-solid fa-binoculars fa-5x text-white d-none d-lg-block d-xl-block d-md-none"></i>
+            <i class="fa-solid fa-binoculars fa-3x text-white d-none d-lg-none d-xl-none d-md-block"></i>
+            <i class="fa-solid fa-binoculars fa-3x text-white d-block d-lg-none d-xl-none d-md-none d-sm-block"></i>
+            <h1 class="display-5 fw-bold logo-font text-white">Sasquatch Watch</h1>
+            <div class="col-lg-6 mx-auto">
+                <p class="lead mb-4 text-white d-none d-lg-block d-xl-block d-md-block">A place to record all of your Sasquatch sightings!</p>
+                <div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
+                    <a type="button" class="btn btn-primary btn-lg px-4 gap-3 text-white d-none d-lg-block d-xl-block d-md-none" href="/sighting/report">Report a Sighting</a>
+                    <a type="button" class="btn btn-primary btn-md px-4 gap-3 text-white d-none d-lg-none d-xl-none d-md-block" href="/sighting/report">Report a Sighting</a>
+                    <a type="button" class="btn btn-primary btn-sm px-4 gap-3 text-white d-block d-lg-none d-xl-none d-md-none d-sm-block" href="/sighting/report">Report a Sighting</a>
+                </div>
+            </div>
+        </div>
+        <div class="container text-center mt-5">
+            <h1 class="mt-5 w-bold logo-font sub-text">Sasquatch Sightings</h1>
+                    <hr>
+            <div class="row justify-content-center mt-5">
+            <div class="col-lg-9 col-sm-12 mt-5">
+                <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+                    {% for sighting in sighting %}
+                    <div class="col mt-3">
+                        <div class="card shadow-sm">
+                            <img class="bd-placeholder-img-sighting
+                            card-img-top">
+                            <div class="card-body">
+                                <h5 class="display-5 fw-bold logo-font sub-text">{{sighting.location}}</h5>
+                                <p class="font-italic">{{sighting.sasquatch_num}} Sasquatchs sighted on {{sighting.date.strftime('%B %d, %Y')}}</p>
+                                
+                                <p class="card-text"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">{{sighting.description}}</font></font></p>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div class="btn-group">
+                                        <a type="button" class="btn btn-sm btn-outline-secondary" type="submit" href="/view-sighting/{{sighting.id}}/{{sighting.user_reported_id}}"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">View</font></font></a>
+                                        {% if sighting.user_reported_id == user.id %}
+                                        <a type="button" class="btn btn-sm btn-outline-secondary" type="submit" href="/edit-sighting/{{sighting.id}}"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Edit</font></font></a>
+                                        <a type="button" class="btn btn-sm btn-outline-secondary" type="submit" href="/destroy/{{sighting.id}}"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Delete</font></font></a>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %} 
+                </div>
+            </div>
+            <div class="col-lg-3 col-sm-8 mt-5 order-1">
+                <div class="card mb-4 rounded-3 shadow-sm">
+                    <div class="card-header py-3">
+                        <div class="fa-solid fa-circle-user fa-4x"></div><h2 class="logo-font">Welcome, {{user.first_name}}!</h2>
+                    </div>
+                    <div class="card-body">
+                        <ul class="list-unstyled mt-3 mb-4 text-start">
+                            <li><strong>Name: {{user.first_name}} {{user.last_name}}</strong></li>
+                            <li><strong>Email: {{user.email}}</strong></li>
+                            <li><strong>Bio: {{user.bio}}</strong></li>
+                        </ul>
+                        <a href="/edit-profile" class="w-100 btn btn-sm btn-outline-primary" type="button">Update My User Profile</a>
+                        <a href="/sighting/report" class="w-100 btn btn-sm btn-outline-primary mt-3" type="button">Report a Sighting</a>
+                    </div>
+                </div>
+            </div>
+            </div>
+        </div>
+    </main>
+    <footer class="bg-dark text-center text-white">
+        <div class="container p-4 pb-0">
+            <section class="mb-4">
+                <a class="btn btn-outline-light btn-floating m-1" href="#" role="button"><i class="fab fa-facebook-f"></i></a>
+                <a class="btn btn-outline-light btn-floating m-1" href="#" role="button"><i class="fab fa-twitter"></i></a>
+                <a class="btn btn-outline-light btn-floating m-1" href="#" role="button"><i class="fab fa-instagram"></i></a>
+            </section>
+        </div>
+        <div class="text-center p-3 bg-dark">
+            ©2022 Sasquatch Watch, Inc. <a class="text-white" href="#">SasquatchWatch.com</a>
+        </div>
+    </footer>
+    <!-- JavaScript Bundle with Popper -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2" crossorigin="anonymous"></script>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+<script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+</body>
+</html>

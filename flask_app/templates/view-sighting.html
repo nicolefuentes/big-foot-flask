@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- NINJA BONUS: Use a CSS framework to style your form -->
+    <link rel=stylesheet type=text/css href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel=stylesheet type=text/css href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
+    <link rel=stylesheet type=text/css href="{{ url_for('static', filename='css/bootstrap.css') }}">
+    <script src="https://kit.fontawesome.com/e8b6f3f0bb.js" crossorigin="anonymous"></script>
+    
+    <title>{{sighting.location}} | Sasquatch Watch</title>
+</head>
+<body class="d-flex flex-column h-100" cz-shortcut-listen="true">
+    <header>
+        <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark ">
+            <a class="navbar-brand logo-font" href="/dashboard">Sasquatch Watch <i class="fa-solid fa-binoculars"></i></a>
+            <button class="navbar-toggler collapsed" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="navbar-collapse collapse" id="navbarCollapse">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item active">
+                        <a class="nav-link" href="/dashboard">Home <span class="sr-only">(current)</span></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/edit-profile">Edit Profile</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/sighting/report">Report a Sighting</a>
+                    </li>
+                    <li class="nav-item nav-link px-2">Welcome, {{user.first_name}} &nbsp;</li>
+                    <li class="nav-item"><a href="/logout" class="nav-link px-2">Logout <i class="fa-solid fa-arrow-right-from-bracket"></i></a></li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+    <main role="main">
+        <div class="container">
+            <div class="row justify-content-center mt-5">
+                <div class="col-lg-9 col-sm-12">
+                    <div class="px-4 py-5 my-5 text-center">
+                        <img class="show-bg-sighting d-block mx-auto mb-4">
+                        <h1 class="display-5 fw-bold logo-font">{{sighting.location}}</h1>
+                        <div class="col-lg-6 mx-auto">
+                            <p class="lead mb-1 sub-text">Sighted on: {{sighting.date.strftime('%B %d, %Y')}}</p>
+                            <p class="lead mb-1 sub-text">Sighted by: {{added_by.first_name}} {{added_by.last_name}}</p>
+                            <p class="lead mb-4 sub-text">Number of Sasquatchs Sighted: {{sighting.sasquatch_num}}</p>
+                        </div>
+                    </div>
+                    <div class="row justify-content-center mt-5 mb-5">
+                        <div class="col-8 align-self-center">
+                            <h2 class="logo-font sub-text"><i class="fa-solid fa-typewriter"></i> Sighting Description:</h2>
+                            <p>{{sighting.description}}</p>
+                            <a type="button" class="btn btn-primary btn-md px-4 gap-3 text-white mt-5" href="/dashboard"><i class="fa-solid fa-backward"></i> Back to Home </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-sm-12 mt-5">
+                    <div class="card mb-4 rounded-3 shadow-sm">
+                        <div class="card-header py-3">
+                            <div class="fa-light fa-face-rolling-eyes fa-4x"></div><h2 class="logo-font">Sighting Skeptics</h2>
+                            <h5 class="logo-font">Total Skeptics = {{skeptic|length}}</h5>
+                        </div>
+                        <div class="card-body">
+                            <ul class="list-unstyled mt-3 mb-4 text-start">
+                                {% for skeptic in skeptic %}
+                                <li class="lead mb-1 sub-text">{{skeptic.first_name}} {{skeptic.last_name}}</li>
+                                {% endfor %}
+                                
+                            </ul>
+                            <a class="btn btn-outline-primary mt-3" href="/skeptic/{{sighting.id}}/{{user.id}}/{{sighting.user_reported_id}}"><i class="fa-light fa-face-rolling-eyes fa-1x"></i> I'm a Skeptic</a>
+                            {% if skeptic.user_skeptic_id != user.id %}
+                            <a class="btn btn-outline-primary mt-3" href="/believe/{{sighting.id}}/{{user.id}}/{{sighting.user_reported_id}}"><i class="fa-light fa-face-astonished fa-1x"></i> I Believe!</a>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer class="bg-dark text-center text-white">
+        <div class="container p-4 pb-0">
+            <section class="mb-4">
+                <a class="btn btn-outline-light btn-floating m-1" href="#" role="button"><i class="fab fa-facebook-f"></i></a>
+                <a class="btn btn-outline-light btn-floating m-1" href="#" role="button"><i class="fab fa-twitter"></i></a>
+                <a class="btn btn-outline-light btn-floating m-1" href="#" role="button"><i class="fab fa-instagram"></i></a>
+            </section>
+        </div>
+        <div class="text-center p-3 bg-dark">
+            ©2022 Sasquatch Watch, Inc. <a class="text-white" href="#">SasquatchWatch.com</a>
+        </div>
+    </footer>
+<!-- JavaScript Bundle with Popper -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2" crossorigin="anonymous"></script>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+<script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+</body>
+</html>
